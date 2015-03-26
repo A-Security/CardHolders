@@ -1,6 +1,7 @@
 package personcontrol;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -18,13 +19,13 @@ import org.xml.sax.SAXException;
 
 
 public class MainClass {
-    public static boolean fillGRCardHolders() {
+    public boolean fillGRCardHolders() {
         AdpWebService service = new AdpWebService();
         AdpWebServiceSoap port = service.getAdpWebServiceSoap();
         return port.fillGRCardHolders();
     }
     public ArrayList<AdpCardHolder> getCHsFromGR() {
-        ArrayList<AdpCardHolder> holders = new ArrayList<>();
+        ArrayList<AdpCardHolder> holders = new ArrayList<AdpCardHolder>();
         try {
             String ARTIFACT_PATH = "/_system/governance";
             String HOLDERS_PATH = "/ssoi/cardholders";
@@ -40,10 +41,11 @@ public class MainClass {
             for (String res : col.getChildren())
             {
                 Resource resrc = registry.get(res);
-                Object content;
-                if (resrc != null && (content = resrc.getContent()) != null)
+                
+                if (resrc != null)
                 {
-                    holders.add(new AdpCardHolder(content));
+                    InputStream is = resrc.getContentStream();
+                    holders.add(new AdpCardHolder(is));
                 }
             }
             return holders;
@@ -52,7 +54,7 @@ public class MainClass {
         }
         
     }
-    private AdpCardHolder GRcontentToCH(byte[] GRcontent){
+    /*private AdpCardHolder GRcontentToCH(byte[] GRcontent){
         AdpCardHolder ch = new AdpCardHolder();
         try {
             DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
@@ -74,5 +76,5 @@ public class MainClass {
         } catch (ParserConfigurationException | SAXException | IOException ex) {
         } 
         return ch;
-    }
+    }*/
 }

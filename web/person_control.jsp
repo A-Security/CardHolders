@@ -54,7 +54,7 @@
                 <select name="source" size="20" multiple style="border-style:none; width:250px; position:absolute; top: 115px; left:50px;">
              <% MainClass mc = new MainClass();
                 ArrayList<AdpCardHolder> holders = mc.getCHsFromGR();
-                ArrayList<AdpCardHolder> VipCH = new ArrayList<>();
+                ArrayList<AdpCardHolder> VipCH = new ArrayList<AdpCardHolder>();
                 for (AdpCardHolder ch : holders) {
                     if(ch.isVip()){ 
                         VipCH.add(ch);

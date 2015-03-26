@@ -2,6 +2,7 @@ package personcontrol;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,8 +21,8 @@ public class AdpCardHolder {
     public AdpCardHolder(){
     }
     
-    public AdpCardHolder(Object GRcontent) {
-        GRcontentToCH((byte[])GRcontent);
+    public AdpCardHolder(InputStream is) {
+        GRcontentToCH(is);
     }
 
     public AdpCardHolder(String ID, String Name, String ShortName, String CardNo, String PhotoLink, boolean VIP) {
@@ -81,12 +82,12 @@ public class AdpCardHolder {
         this.vip = Boolean.valueOf(VIP);
     }
     
-    private void GRcontentToCH(byte[] GRcontent){
+    private void GRcontentToCH(InputStream is){
         try {
             DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
             bf.setValidating(false);
             DocumentBuilder builder = bf.newDocumentBuilder();
-            Document xdoc = builder.parse(new ByteArrayInputStream(GRcontent));
+            Document xdoc = builder.parse(is);
             for(Field f : this.getClass().getDeclaredFields()){
                 f.setAccessible(true);
                 String val = xdoc.getElementsByTagName(f.getName()).item(0).getTextContent();
