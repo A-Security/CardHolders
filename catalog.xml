@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <system systemId="http://192.168.0.181/AdpWebService.asmx?WSDL" uri="src/conf/xml-resources/web-service-references/AdpWebService/wsdl/192.168.0.181/AdpWebService.asmx.wsdl"/>
+    <system systemId="http://192.168.0.151:9763/resource/1.0.0/?_wadl" uri="src/conf/xml-resources/web-service-references/__wadl/wsdl/192.168.0.151_9763/resource/1.0.0/._wadl.xml"/>
 </catalog>

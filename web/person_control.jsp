@@ -52,19 +52,19 @@
                     Список посетителей
                 </div>
                 <select name="source" size="20" multiple style="border-style:none; width:250px; position:absolute; top: 115px; left:50px;">
-                    <%  ArrayList<AdpCardHolder> ls = new ArrayList<AdpCardHolder>();
-                        for (int i = 0; i < 10; i++) {
-                            AdpCardHolder ch = new AdpCardHolder();
-                            ch.setID("ID" + i);
-                            ch.setName("Name" + i);
-                            ls.add(ch);
-                        }
-                        for (AdpCardHolder ch : ls) {
-                            if (true){
-                                
-                            }%>
-                            <option value="<%= ch.getID()%>"><%= ch.getName()%></option>
-                    <%  }%>
+             <% MainClass mc = new MainClass();
+                ArrayList<AdpCardHolder> holders = mc.getCHsFromGR();
+                ArrayList<AdpCardHolder> VipCH = new ArrayList<>();
+                for (AdpCardHolder ch : holders) {
+                    if(ch.isVip()){ 
+                        VipCH.add(ch);
+                    }
+                    else{
+             %>
+                    <option value="<%= ch.getId()%>"><%= ch.getName()%></option>
+             <%     
+                    }
+                } %>
                 </select>
                 <input type="button" value=" Выбрать " class="baton" style="width:70px; padding:3px; position:absolute; left:310px; top:150px;" />
                 <input type="button" value=" Удалить " class="baton" style="width:70px; padding:3px; position:absolute; left:310px; top:180px;" />
@@ -72,7 +72,10 @@
                     Список спец. контроля
                 </div>
                 <select name="selected" size="10" style="border-style:none; width:250px; position:absolute; top: 115px; left:390px;">
-                    <option><%= MainClass.fillGRCardHolders()%></option>
+             <% for (AdpCardHolder ch : VipCH) {
+             %>
+                    <option value="<%= ch.getId()%>"><%= ch.getName()%></option>
+             <% } %>
                 </select>
                 <input type="submit" value=" OK " class="baton" style="width:70px; position:absolute;top: 465px; left:300px;"></input>
                 <input type="submit" value="Отменить" class="baton" style="width:70px; position:absolute;top: 465px; left:380px;"></input>
