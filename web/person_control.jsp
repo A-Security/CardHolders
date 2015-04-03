@@ -39,6 +39,7 @@
         </style>
     </head>
     <body bgcolor="#1e1e1e">
+        <%! PersonControl pc = new PersonControl(); %>
         <div class="topdiv">
             <div class="title">
                 Спецконтроль
@@ -51,19 +52,17 @@
                 <div class="title" style="font-size:14pt; position:absolute; top: 85px; left:50px;">
                     Список посетителей
                 </div>
+                <!--input type="button" onclick="alert('<%--= mc.fillGRCardHolders()--%>')" /-->
                 <select name="source" size="20" multiple style="border-style:none; width:250px; position:absolute; top: 115px; left:50px;">
-             <% MainClass mc = new MainClass();
-                ArrayList<AdpCardHolder> holders = mc.getCHsFromGR();
+             <% ArrayList<AdpCardHolder> holders = pc.getCHsFromGR();
                 ArrayList<AdpCardHolder> VipCH = new ArrayList<AdpCardHolder>();
                 for (AdpCardHolder ch : holders) {
                     if(ch.isVip()){ 
                         VipCH.add(ch);
                     }
-                    else{
-             %>
-                    <option value="<%= ch.getId()%>"><%= ch.getName()%></option>
-             <%     
-                    }
+                    else{ %>
+                        <option value="<%= ch.getId()%>"><%= ch.getName()%></option>
+                <%  }
                 } %>
                 </select>
                 <input type="button" value=" Выбрать " class="baton" style="width:70px; padding:3px; position:absolute; left:310px; top:150px;" />
@@ -73,9 +72,10 @@
                 </div>
                 <select name="selected" size="10" style="border-style:none; width:250px; position:absolute; top: 115px; left:390px;">
              <% for (AdpCardHolder ch : VipCH) {
-             %>
-                    <option value="<%= ch.getId()%>"><%= ch.getName()%></option>
-             <% } %>
+                    if (ch != null) { %>
+                            <option value="<%= ch.getId()%>"><%= ch.getName()%></option>
+                <%  }
+                } %>
                 </select>
                 <input type="submit" value=" OK " class="baton" style="width:70px; position:absolute;top: 465px; left:300px;"></input>
                 <input type="submit" value="Отменить" class="baton" style="width:70px; position:absolute;top: 465px; left:380px;"></input>

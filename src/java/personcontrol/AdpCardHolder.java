@@ -1,14 +1,10 @@
 package personcontrol;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 public class AdpCardHolder {
     private String id;
@@ -16,13 +12,13 @@ public class AdpCardHolder {
     private String shortName;
     private String cardNo;
     private String photoLink;
-    private boolean vip;
+    private Boolean vip;
 
     public AdpCardHolder(){
     }
     
     public AdpCardHolder(InputStream is) {
-        GRcontentToCH(is);
+        deserializeFromGRContent(is);
     }
 
     public AdpCardHolder(String ID, String Name, String ShortName, String CardNo, String PhotoLink, boolean VIP) {
@@ -82,7 +78,7 @@ public class AdpCardHolder {
         this.vip = Boolean.valueOf(VIP);
     }
     
-    private void GRcontentToCH(InputStream is){
+    private void deserializeFromGRContent(InputStream is){
         try {
             DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
             bf.setValidating(false);
@@ -91,9 +87,10 @@ public class AdpCardHolder {
             for(Field f : this.getClass().getDeclaredFields()){
                 f.setAccessible(true);
                 String val = xdoc.getElementsByTagName(f.getName()).item(0).getTextContent();
-                f.set(this, (f.getType() != boolean.class) ? val : Boolean.valueOf(val) );
+                f.set(this, (f.getType() != Boolean.class) ? val : Boolean.valueOf(val) );
             }
-        } catch (ParserConfigurationException | SAXException | IOException | IllegalArgumentException | IllegalAccessException ex) {
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
         }
     }
 }
