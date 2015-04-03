@@ -1,45 +1,19 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" import="personcontrol.*" import="java.util.ArrayList"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="personcontrol.*" import="java.util.ArrayList" %>
+<% 
+    PcWSOAdapters adp = new PcWSOAdapters();
+    pageContext.setAttribute("notVipCHs", adp.getNotVipCHs()); 
+    pageContext.setAttribute("vipCHs", adp.getVipCHs());
+%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Настройка</title>
-        <style type="text/css">
-            .topdiv {
-                color:#aaaaaa;
-                margin-top:20px;
-                margin-left:40px;
-            }
-
-            .title {
-                font-family:calibri;
-                font-size:32pt;
-            }
-
-            .baton {
-                height:20px;
-                background-color: #94D1FF; 
-                /* border */
-                border-style:none;
-                border-radius:6px; 
-                -webkit-border-radius:6px; 
-                -moz-border-radius:5px;
-                /* transition */
-                transition: all 0.5s ease;
-                -webkit-transition: all 0.5s ease;
-                -moz-transition: all 0.5s ease;
-            }
-            .baton:hover {
-                background-color: #FFFFFF;
-                box-shadow: 0px 0px 7px rgba(255,255,255,0.8);
-                -webkit-box-shadow: 0px 0px 7px rgba(255,255,255,0.8);
-                -moz-box-shadow: 0px 0px 7px rgba(255,255,255,0.8);
-            }
-
-        </style>
+        <link rel="stylesheet" href="config/main.css" />
     </head>
     <body bgcolor="#1e1e1e">
-        <%! PersonControl pc = new PersonControl(); %>
         <div class="topdiv">
             <div class="title">
                 Спецконтроль
@@ -47,38 +21,32 @@
                     <img src="config/persons.png" width="62" height="62">
                 </div>
             </div>
-            <hr style="margin-left:0px; margin-right: 100px">
+            <hr class="hrclass">
             <form action="">
-                <div class="title" style="font-size:14pt; position:absolute; top: 85px; left:50px;">
+                <div class="title divclass" >
                     Список посетителей
                 </div>
-                <!--input type="button" onclick="alert('<%--= mc.fillGRCardHolders()--%>')" /-->
-                <select name="source" size="20" multiple style="border-style:none; width:250px; position:absolute; top: 115px; left:50px;">
-             <% ArrayList<AdpCardHolder> holders = pc.getCHsFromGR();
-                ArrayList<AdpCardHolder> VipCH = new ArrayList<AdpCardHolder>();
-                for (AdpCardHolder ch : holders) {
-                    if(ch.isVip()){ 
-                        VipCH.add(ch);
-                    }
-                    else{ %>
-                        <option value="<%= ch.getId()%>"><%= ch.getName()%></option>
-                <%  }
-                } %>
+                <select name="source" size="20" multiple class="selectclass">
+                    <c:forEach items="${notVipCHs}" var="ch">
+                        <c:if test="${ch != null}">
+                            <option value="${ch.getId()}">${ch.getName()}</option>
+                        </c:if>
+                    </c:forEach>
                 </select>
-                <input type="button" value=" Выбрать " class="baton" style="width:70px; padding:3px; position:absolute; left:310px; top:150px;" />
-                <input type="button" value=" Удалить " class="baton" style="width:70px; padding:3px; position:absolute; left:310px; top:180px;" />
-                <div class="title" style="font-size:14pt; position:absolute; top: 85px; left:390px;">
+                <input type="submit" id="select" value=" Выбрать " class="baton inputclass"  />
+                <input type="submit" id="remove" value=" Удалить " class="baton inputclass2"  />
+                <div class="title divclass2" >
                     Список спец. контроля
                 </div>
-                <select name="selected" size="10" style="border-style:none; width:250px; position:absolute; top: 115px; left:390px;">
-             <% for (AdpCardHolder ch : VipCH) {
-                    if (ch != null) { %>
-                            <option value="<%= ch.getId()%>"><%= ch.getName()%></option>
-                <%  }
-                } %>
+                <select name="selected" size="10" class="selectclass2">
+                    <c:forEach items="${vipCHs}" var="ch">
+                        <c:if test="${ch != null}">
+                            <option value="${ch.getId()}">${ch.getName()}</option>
+                        </c:if>
+                    </c:forEach>
                 </select>
-                <input type="submit" value=" OK " class="baton" style="width:70px; position:absolute;top: 465px; left:300px;"></input>
-                <input type="submit" value="Отменить" class="baton" style="width:70px; position:absolute;top: 465px; left:380px;"></input>
+                <input type="submit" id="ok" value=" OK " class="baton inputclass3" ></input>
+                <input type="submit" id="cancel" value=" Отменить " class="baton inputclass4" ></input>
             </form>
         </div>
     </body>

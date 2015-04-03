@@ -18,7 +18,7 @@ public class AdpCardHolder {
     }
     
     public AdpCardHolder(InputStream is) {
-        deserializeFromGRContent(is);
+        deserializeGRContent(is);
     }
 
     public AdpCardHolder(String ID, String Name, String ShortName, String CardNo, String PhotoLink, boolean VIP) {
@@ -78,7 +78,7 @@ public class AdpCardHolder {
         this.vip = Boolean.valueOf(VIP);
     }
     
-    private void deserializeFromGRContent(InputStream is){
+    private void deserializeGRContent(InputStream is){
         try {
             DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
             bf.setValidating(false);
