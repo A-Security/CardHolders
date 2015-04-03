@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page import="personcontrol.*" import="java.util.ArrayList" %>
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8" import="personcontrol.*"%>
 <% 
     PcWSOAdapters adp = new PcWSOAdapters();
     pageContext.setAttribute("notVipCHs", adp.getNotVipCHs()); 
