@@ -28,7 +28,7 @@
     </target>
     <target name="wsimport-client-AdpWebService" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/AdpWebService"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AdpWebService" destdir="${build.generated.dir}/jax-wsCache/AdpWebService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/AdpWebService/wsdl/192.168.0.181/AdpWebService.asmx.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://10.28.65.229/AdpWebService.asmx?WSDL" xnocompile="true" xendorsed="true">
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AdpWebService" destdir="${build.generated.dir}/jax-wsCache/AdpWebService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/AdpWebService/wsdl/192.168.0.181/AdpWebService.asmx.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://192.168.0.181/AdpWebService.asmx?WSDL" xnocompile="true" xendorsed="true">
             <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/AdpWebService/wsdl/192.168.0.181/AdpWebService.asmx.wsdl"/>
             <produces dir="${build.generated.dir}/jax-wsCache/AdpWebService"/>
         </wsimport>

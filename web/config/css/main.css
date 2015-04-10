@@ -1,0 +1,49 @@
+html, body, #map, #cam , #view{
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+#map {
+	left: 0px;
+	top: 0px;
+}
+
+.leaflet-container {
+	background: #1e1e1e;
+}
+.standard {
+}
+.icon {
+	/* Safari and Chrome */
+    -webkit-transform:rotate(45deg);
+	/* IE9 */
+	-ms-transform:rotate(135deg);
+} 			
+
+.yellowClass {
+	border: 2px solid yellow;
+}
+
+.blankClass {
+	border: 0px;
+}
+
+#container img {
+	display: block;
+	margin-top: 20px;
+	width: 800px;
+	height: 600px;
+	border: 1px solid black;
+}
+#container a {
+	padding-right: 10px;
+	color: black;
+}
+#container a:active {
+	padding-right: 10px;
+	color: #cacaca;
+}
+#container p {
+	width: 800px;
+}

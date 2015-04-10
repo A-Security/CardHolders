@@ -6,7 +6,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 
-public class AdpCardHolder {
+public class AdpCardHolder implements Comparable<AdpCardHolder>{
     private String id;
     private String name;
     private String shortName;
@@ -92,5 +92,10 @@ public class AdpCardHolder {
         } catch (Exception ex) {
             System.out.println(ex.toString());
         }
+    }
+
+    @Override
+    public int compareTo(AdpCardHolder other) {
+        return name.compareTo(other.name);
     }
 }

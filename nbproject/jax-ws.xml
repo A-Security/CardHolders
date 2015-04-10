@@ -22,7 +22,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://10.28.65.229/AdpWebService.asmx?WSDL</wsimport-option-value>
+          <wsimport-option-value>http://192.168.0.181/AdpWebService.asmx?WSDL</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>
