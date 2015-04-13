@@ -1,25 +1,16 @@
 package personcontrol;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import static java.lang.System.out;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.*;
 import org.wso2.carbon.registry.app.RemoteRegistry;
-import org.datacontract.schemas._2004._07.apacsadapter.*;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.dom4j.io.*;
+import org.w3c.dom.*;
+import org.wso2.carbon.governance.api.cache.ArtifactCacheManager;
 import org.wso2.carbon.registry.core.*;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.xml.sax.SAXException;
@@ -42,12 +33,14 @@ public class PcWSOAdapters {
 
     public PcWSOAdapters() {
         System.setProperty("sun.security.ssl.allowUnsafeRenegotiation", "true");
+        System.setProperty("carbon.repo.write.mode", "true");
         try {
             grUrl = new URL("https", GR_HOST, GR_PORT, "/registry");
             registry = new RemoteRegistry(grUrl, GR_USER, GR_PASS);
         } catch (MalformedURLException | RegistryException e) {
             out.print(e.toString());
         }
+        ArtifactCacheManager.enableClientCache();
     }
 
     public boolean fillCHsSets() {
@@ -60,27 +53,22 @@ public class PcWSOAdapters {
                     InputStream contentStream = res.getContentStream();
                     AdpCardHolder ch = new AdpCardHolder(contentStream);
                     String vippath = VIPS_FULL_PATH + "/" + ch.getId();
-                    if (ch.isVip()){
-                        if (registry.resourceExists(vippath)){
-                            vipCHs.add(ch);
-                        }
-                        else {
-                            contentStream = setVipValue(contentStream, false);
-                            res.setContentStream(contentStream);
-                            registry.put(resPath, res);
-                        }
-                    }
-                    else {
-                        if (registry.resourceExists(vippath)){
+                    if (registry.resourceExists(vippath)){
+                        if (!ch.isVip()){
                             contentStream = setVipValue(contentStream, true);
                             res.setContentStream(contentStream);
                             registry.put(resPath, res);
                         }
-                        else {
-                            notVipCHs.add(ch);
-                        }
+                        vipCHs.add(ch);
                     }
-                    
+                    else {
+                        if (ch.isVip()){
+                            contentStream = setVipValue(contentStream, false);
+                            res.setContentStream(contentStream);
+                            registry.put(resPath, res);
+                        }
+                        notVipCHs.add(ch);
+                    }
                 }
             }
             result = true;
@@ -91,50 +79,30 @@ public class PcWSOAdapters {
         return result;
     }
 
-    public boolean setCHsVIP(String[] vips) {
+    public boolean setCHsVipValue(String[] chsList, boolean vipValue) {
         boolean result = false;
-        if (vips == null){
+        if (chsList == null || chsList.length == 0){
             return result;
         }
         try {
-            for (String vip : vips) {
-                String chPath = HOLDERS_FULL_PATH + "/" + vip + ".xml";
-                String vipPath = VIPS_FULL_PATH + "/" + vip;
-                if (!registry.resourceExists(vipPath)) {
-                    registry.put(vipPath, registry.newResource());
+            for (String ch : chsList) {
+                String chPath = HOLDERS_FULL_PATH + "/" + ch + ".xml";
+                String vipPath = VIPS_FULL_PATH + "/" + ch;
+                if (registry.resourceExists(vipPath)){
+                    if (!vipValue){
+                       registry.delete(vipPath); 
+                    }
                 }
+                else{
+                    if (vipValue){
+                        registry.put(vipPath, registry.newResource());
+                    }
+                }
+
                 if (registry.resourceExists(chPath)) {
                     Resource res = registry.get(chPath);
                     InputStream contentStream = res.getContentStream();
-                    contentStream = setVipValue(contentStream, true);
-                    res.setContentStream(contentStream);
-                    registry.put(chPath, res);
-                }
-            }
-            result = true;
-        } catch (Exception ex) {
-            out.print(ex.toString());
-            result = false;
-        }
-        return result;
-    }
-    
-    public boolean remCHsVIP(String[] notvips) {
-        boolean result = false;
-        if (notvips == null){
-            return result;
-        }
-        try {
-            for (String notvip : notvips) {
-                String chPath = HOLDERS_FULL_PATH + "/" + notvip + ".xml";
-                String vipPath = VIPS_FULL_PATH + "/" + notvip;
-                if (registry.resourceExists(vipPath)) {
-                    registry.delete(vipPath);
-                }
-                if (registry.resourceExists(chPath)) {
-                    Resource res = registry.get(chPath);
-                    InputStream contentStream = res.getContentStream();
-                    contentStream = setVipValue(contentStream, false);
+                    contentStream = setVipValue(contentStream, vipValue);
                     res.setContentStream(contentStream);
                     registry.put(chPath, res);
                 }

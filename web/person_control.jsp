@@ -32,7 +32,7 @@
                 <div class="title divclass" >
                     Список посетителей
                 </div>
-                <select name="notvipch" size="20" multiple="multiple" class="selectclass">
+                <select name="notvipch" size="20"  multiple="true" class="selectclass">
                     <c:forEach items="${notVipCHs}" var="ch">
                         <c:if test="${ch != null}">
                             <option value="${ch.getId()}">${ch.getName()}</option>
@@ -44,14 +44,14 @@
                 <div class="title divclass2" >
                     Список спец. контроля
                 </div>
-                <select name="vipch" size="10" class="selectclass2">
+                <select name="vipch" multiple="true" size="10" class="selectclass2">
                     <c:forEach items="${vipCHs}" var="ch">
                         <c:if test="${ch != null}">
                             <option value="${ch.getId()}">${ch.getName()}</option>
                         </c:if>
                     </c:forEach>
                 </select>
-                <input type="submit" name="ok" value=" OK " class="baton inputclass3"/>
+                <input type="submit" name="ok" value=" OK " class="baton inputclass3" onclick="selAllSelect()"/>
                 <input type="submit" name="cancel" value=" Отменить " class="baton inputclass4"/>
             </form>
         </div>
