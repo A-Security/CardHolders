@@ -50,12 +50,6 @@ public class PcWSOAdapters {
         }
     }
 
-    public boolean fillGRCardHolders() {
-        AdpWebService service = new AdpWebService();
-        AdpWebServiceSoap port = service.getAdpWebServiceSoap();
-        return port.fillGRCardHolders();
-    }
-
     public boolean fillCHsSets() {
         boolean result;
         try {
