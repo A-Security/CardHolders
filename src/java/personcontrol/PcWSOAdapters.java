@@ -2,13 +2,20 @@ package personcontrol;
 
 import java.io.*;
 import static java.lang.System.out;
-import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.xml.parsers.*;
+import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.wso2.carbon.registry.app.RemoteRegistry;
-import org.dom4j.io.*;
 import org.w3c.dom.*;
 import org.wso2.carbon.governance.api.cache.ArtifactCacheManager;
 import org.wso2.carbon.registry.core.*;
@@ -16,7 +23,7 @@ import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.xml.sax.SAXException;
 
 public class PcWSOAdapters {
-
+    private static final String GREG_HOME = "/opt/wso2/gr";
     private static final String ARTIFACT_PATH = "/_system/governance";
     private static final String HOLDERS_PATH = "/ssoi/cardholders";
     private static final String VIPS_PATH = "/ssoi/personcontrol";
@@ -24,8 +31,8 @@ public class PcWSOAdapters {
     private static final String VIPS_FULL_PATH = ARTIFACT_PATH + VIPS_PATH;
     private static final String GR_HOST = "192.168.0.151"; //"10.28.65.228";
     private static final int GR_PORT = 9443;
-    private static final String GR_USER = "admin";
-    private static final String GR_PASS = "Flvbybcnhfnjh1";
+    private static final String GR_USER = "Apacs";
+    private static final String GR_PASS = "Aa1234567";
     private URL grUrl;
     private Registry registry;
     private List<AdpCardHolder> vipCHs = new ArrayList<>();
@@ -34,9 +41,12 @@ public class PcWSOAdapters {
     public PcWSOAdapters() {
         System.setProperty("sun.security.ssl.allowUnsafeRenegotiation", "true");
         System.setProperty("carbon.repo.write.mode", "true");
+        //System.setProperty("javax.net.ssl.trustStore", GREG_HOME + "/repository/resources/security/client-truststore.jks");
+        //System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
+        //System.setProperty("javax.net.ssl.trustStoreType","JKS");
         try {
-            grUrl = new URL("https", GR_HOST, GR_PORT, "/registry");
-            registry = new RemoteRegistry(grUrl, GR_USER, GR_PASS);
+            this.grUrl = new URL("https", GR_HOST, GR_PORT, "/registry");
+            this.registry = new RemoteRegistry(grUrl, GR_USER, GR_PASS);            
         } catch (MalformedURLException | RegistryException e) {
             out.print(e.toString());
         }
@@ -50,23 +60,20 @@ public class PcWSOAdapters {
             for (String resPath : col.getChildren()) {
                 Resource res = registry.get(resPath);
                 if (res != null && !(res instanceof Collection)) {
+                    
                     InputStream contentStream = res.getContentStream();
                     AdpCardHolder ch = new AdpCardHolder(contentStream);
-                    String vippath = VIPS_FULL_PATH + "/" + ch.getId();
-                    if (registry.resourceExists(vippath)){
-                        if (!ch.isVip()){
-                            contentStream = setVipValue(contentStream, true);
-                            res.setContentStream(contentStream);
-                            registry.put(resPath, res);
-                        }
+                    String chPath = HOLDERS_FULL_PATH + "/" + ch.getId() + ".xml";
+                    String vipPath = VIPS_FULL_PATH + "/" +ch.getId();
+                    boolean vipExist = registry.resourceExists(vipPath);
+                    if (vipExist != ch.isVip()) {
+                        res = setVipValue(res, vipExist);
+                        registry.put(chPath, res);
+                    }
+                    if (vipExist){
                         vipCHs.add(ch);
                     }
                     else {
-                        if (ch.isVip()){
-                            contentStream = setVipValue(contentStream, false);
-                            res.setContentStream(contentStream);
-                            registry.put(resPath, res);
-                        }
                         notVipCHs.add(ch);
                     }
                 }
@@ -78,7 +85,31 @@ public class PcWSOAdapters {
         }
         return result;
     }
-
+    private Resource setVipValue(Resource res, boolean vipVal) {
+        try {
+            byte[] resContent = (byte[])res.getContent();
+            ByteArrayInputStream bais = new ByteArrayInputStream(resContent);
+            DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
+            bf.setNamespaceAware(true);
+            bf.setValidating(false);
+            DocumentBuilder builder = bf.newDocumentBuilder();
+            Document xdoc = builder.parse(bais);
+            Node vip = xdoc.getElementsByTagName("vip").item(0);
+            vip.setTextContent(String.valueOf(vipVal));
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            DOMSource source = new DOMSource(xdoc);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            StreamResult sr = new StreamResult(baos);
+            transformer.transform(source, sr);
+            resContent = baos.toByteArray();
+            res.setContent(resContent);
+        } catch (RegistryException | TransformerException | ParserConfigurationException | SAXException | IOException | DOMException e) {
+            out.print(e.toString());
+        }
+        return res;
+    }
     public boolean setCHsVipValue(String[] chsList, boolean vipValue) {
         boolean result = false;
         if (chsList == null || chsList.length == 0){
@@ -98,13 +129,13 @@ public class PcWSOAdapters {
                         registry.put(vipPath, registry.newResource());
                     }
                 }
-
                 if (registry.resourceExists(chPath)) {
                     Resource res = registry.get(chPath);
-                    InputStream contentStream = res.getContentStream();
-                    contentStream = setVipValue(contentStream, vipValue);
-                    res.setContentStream(contentStream);
-                    registry.put(chPath, res);
+                    AdpCardHolder ach = new AdpCardHolder(res.getContentStream());
+                    if (ach.isVip() != vipValue){
+                        res = setVipValue(res, vipValue);
+                        registry.put(chPath, res);
+                    }
                 }
             }
             result = true;
@@ -124,25 +155,4 @@ public class PcWSOAdapters {
         Collections.sort(notVipCHs);
         return notVipCHs;
     }
-
-    private InputStream setVipValue(InputStream contentStream, boolean vipVal) {
-        try {
-            DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
-            bf.setValidating(false);
-            DocumentBuilder builder = bf.newDocumentBuilder();
-            Document xdoc = builder.parse(contentStream);
-            Node vip = xdoc.getElementsByTagName("vip").item(0);
-            vip.setTextContent(String.valueOf(vipVal));
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            XMLWriter xmlWriter = new XMLWriter(outputStream, OutputFormat.createPrettyPrint());
-            xmlWriter.write(xdoc);
-            xmlWriter.close();
-            contentStream = new ByteArrayInputStream(outputStream.toByteArray());
-        } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
-            out.print(e.toString());
-            contentStream = null;
-        }
-        return contentStream;
-    }
-
 }

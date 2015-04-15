@@ -15,22 +15,16 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Настройка</title>
+        <title>Configuration</title>
         <link rel="stylesheet" href="config/css/person_control.css" />
         <script src="config/js/person_control.js" type="text/javascript"></script>
     </head>
     <body bgcolor="#1e1e1e">
-        <div class="topdiv">
-            <div class="title">
-                Спецконтроль
-                <div style="float:right;">
-                    <img src="config/persons.png" width="62" height="62">
-                </div>
-            </div>
+        <div class="topdiv">ssh
             <hr class="hrclass">
             <form name="main" action="TransAction" method="POST">
                 <div class="title divclass" >
-                    Список посетителей
+                    Source list
                 </div>
                 <select name="notvipch" size="20"  multiple="true" class="selectclass">
                     <c:forEach items="${notVipCHs}" var="ch">
@@ -42,7 +36,7 @@
                 <input type="button" value=" Выбрать " class="baton inputclass" onclick="addVip()" />
                 <input type="button" value=" Удалить " class="baton inputclass2" onclick="remVip()" />
                 <div class="title divclass2" >
-                    Список спец. контроля
+                    Destination list
                 </div>
                 <select name="vipch" multiple="true" size="10" class="selectclass2">
                     <c:forEach items="${vipCHs}" var="ch">

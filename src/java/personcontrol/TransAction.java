@@ -15,7 +15,6 @@ public class TransAction extends HttpServlet {
             throws ServletException, IOException {
         if (request.getParameter("ok") != null) {
             PcWSOAdapters adp = new PcWSOAdapters();
-            
             String vipch[] = request.getParameterValues("vipch");
             adp.setCHsVipValue(vipch, true);
             String notvipch[] = request.getParameterValues("notvipch");
@@ -24,6 +23,6 @@ public class TransAction extends HttpServlet {
         if (request.getParameter("cancel") != null) {
             request.getRequestDispatcher("/person_control.jsp").forward(request, response);
         }
-        request.getRequestDispatcher("/person_control.jsp").forward(request, response);
+        //request.getRequestDispatcher("/person_control.jsp").forward(request, response);
     }
 }

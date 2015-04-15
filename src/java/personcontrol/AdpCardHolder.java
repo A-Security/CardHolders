@@ -1,10 +1,14 @@
 package personcontrol;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 public class AdpCardHolder implements Comparable<AdpCardHolder>{
     private String id;
@@ -89,7 +93,7 @@ public class AdpCardHolder implements Comparable<AdpCardHolder>{
                 String val = xdoc.getElementsByTagName(f.getName()).item(0).getTextContent();
                 f.set(this, (f.getType() != Boolean.class) ? val : Boolean.valueOf(val) );
             }
-        } catch (Exception ex) {
+        } catch (ParserConfigurationException | SAXException | IOException | SecurityException | DOMException | IllegalArgumentException | IllegalAccessException ex) {
             System.out.println(ex.toString());
         }
     }
