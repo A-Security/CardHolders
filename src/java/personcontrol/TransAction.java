@@ -14,15 +14,11 @@ public class TransAction extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if (request.getParameter("ok") != null) {
-            PcWSOAdapters adp = new PcWSOAdapters();
+            WSOAdapter adp = new WSOAdapter();
             String vipch[] = request.getParameterValues("vipch");
             adp.setCHsVipValue(vipch, true);
-            String notvipch[] = request.getParameterValues("notvipch");
+            String notvipch[] = request.getParameterValues("remvipch");
             adp.setCHsVipValue(notvipch, false);
         }
-        if (request.getParameter("cancel") != null) {
-            request.getRequestDispatcher("/person_control.jsp").forward(request, response);
-        }
-        //request.getRequestDispatcher("/person_control.jsp").forward(request, response);
     }
 }
