@@ -1,0 +1,104 @@
+.skud {
+    padding:5px;
+    background-color: #1e1e1e;
+    font-family: 'Segoe UI Light_', 'Open Sans Light', Verdana, Arial, Helvetica, sans-serif;
+}
+.skud .bg-black  {
+    background-color: #000000 !important;
+}
+.skud .bg-darkRed  {
+    background-color: #9a1616 !important;
+}
+.skud .bg-orange  {
+    background-color: #fa6800 !important;
+}
+.skud .bg-green  {
+    background-color: #60a917 !important;
+}
+.skud .bg-dark  {
+    background-color: #333333 !important;
+}
+.skud .opacity {
+    opacity: .8;
+}
+.skud .br-white{
+    border: 1px #ffffff solid ;
+}
+.skud .br-darkRed{
+    border: 2px #9a1616 solid ;
+}	
+.skud .br-red{
+    border: 1px #e51400 solid ;
+}		
+.skud .br-orange  {
+    border: 1px #fa6800 solid ; 
+}
+.skud .fg-white {
+    color: #eeeeee;
+}
+.skud .fg-black {
+    color: #000000;
+}		
+
+.skud .inner {
+    position:relative;
+    text-align:center;
+    width: auto;
+}
+
+.skud .image {
+    width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+}
+
+.skud .small-photo {
+    width: 145px;
+    height: 168px;
+    padding: 0;
+    margin: 0;
+    display: block;
+    position: absolute;
+    overflow: hidden;
+}
+
+
+.skud .small-photo .content {
+    padding: 4px;
+    font-size: 12px;
+    line-height: 14px;
+    text-align:left;
+    width: inherit;
+    bottom: 0;
+    position: absolute;
+}
+
+.topdiv {
+    color:#aaaaaa;
+    margin-left:20px;
+    margin-top:10px;
+}
+
+.topdiv div{
+    margin-left:0px;
+}
+
+
+.title {
+    font-family:calibri;
+    font-size:32pt;
+}
+
+.skud select {
+    margin-left:144px;
+    width:290px; 
+    border-style:none;
+    border: 1px #e51400 solid;
+    font-size:11pt;
+}
+
+
+#hrid{
+    margin-left:0px;
+    margin-right: 100px;
+}

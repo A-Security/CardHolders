@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17.04.2015 15:01:51 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class name="cardholders.ApacseventsCha" optimistic-lock="version" schema="public" table="apacsevents_cha">
+    <id name="eventid" type="string">
+      <column name="eventid"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="eventtype" type="string">
+      <column name="eventtype"/>
+    </property>
+    <property name="eventtypedesc" type="string">
+      <column name="eventtypedesc"/>
+    </property>
+    <property name="holderid" type="string">
+      <column name="holderid"/>
+    </property>
+    <property name="holdername" type="string">
+      <column name="holdername"/>
+    </property>
+    <property name="holdershortname" type="string">
+      <column name="holdershortname"/>
+    </property>
+    <property name="sourceid" type="string">
+      <column name="sourceid"/>
+    </property>
+    <property name="sourcename" type="string">
+      <column name="sourcename"/>
+    </property>
+    <property name="eventtime" type="string">
+      <column name="eventtime"/>
+    </property>
+    <property name="messagexml" type="string">
+      <column name="messagexml"/>
+    </property>
+    <property name="messageid" type="string">
+      <column name="messageid"/>
+    </property>
+    <property name="messagetime" type="string">
+      <column name="messagetime"/>
+    </property>
+  </class>
+</hibernate-mapping>
