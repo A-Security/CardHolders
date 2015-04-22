@@ -1,6 +1,6 @@
-<%@page import="cardholders.*"%>
+<%@ page import="cardholders.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     EventsHundler eh = new EventsHundler();
     pageContext.setAttribute("accessFaults", eh.getAccessFaults());

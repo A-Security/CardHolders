@@ -9,6 +9,7 @@ import com.asecurity.esbdb.AccessEvents;
 import com.asecurity.esbdb.AccessEvents_Service;
 import java.util.ArrayList;
 import java.util.List;
+import net.java.dev.jaxb.array.AnyTypeArray;
 
 /**
  *
@@ -16,15 +17,17 @@ import java.util.List;
  */
 public class EventsHundler {
 
-    public List<ApacseventsCha> getAccessFaults() {
+    public List<ApcFaultEvents> getAccessFaults() {
         AccessEvents_Service service = new AccessEvents_Service();
         AccessEvents port = service.getAccessEventsPort();
-        List<ApacseventsCha> res = new ArrayList<>();
-        List<Object> af = port.getAccessFaults();
-        for (Object f : af) {
-            res.add((ApacseventsCha)f);
+        List<AnyTypeArray> af = port.getAccessFaults();
+        List<ApcFaultEvents> eventsList = new ArrayList<>();
+        for (AnyTypeArray ata : af) {
+            Object[] objV = ata.getItem().toArray();
+            ApcFaultEvents afe = new ApcFaultEvents(objV);
+            eventsList.add(afe);
         }
-        return res;
+        return eventsList;
     }
     
 }
