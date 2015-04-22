@@ -2,8 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    AccessEvents ae = new AccessEvents();
-    pageContext.setAttribute("accessFaults", ae.getAccessFaults());
+    EventsHundler eh = new EventsHundler();
+    pageContext.setAttribute("accessFaults", eh.getAccessFaults());
 %>
 <!DOCTYPE html>
 <html>
