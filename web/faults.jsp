@@ -1,13 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@page import="com.asecurity.esbdb.ApacseventsCha"%>
-<%@page import="java.util.List"%>
 <%@page import="cardholders.*"%>
 <%
     EventsHundler eh = new EventsHundler();
     eh.fillFaultsPerHolders();
-    pageContext.setAttribute("photoRootPath", eh.getPhotoPath());
+    pageContext.setAttribute("photoRootPath", "http://192.168.0.151:9763/registry/resource/_system/governance/ssoi/cardholders/photo/");
     pageContext.setAttribute("faultsPerHolders", eh.getFaultsPerHolders());
 %>
 <!DOCTYPE html>

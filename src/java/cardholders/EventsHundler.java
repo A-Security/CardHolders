@@ -22,13 +22,6 @@ import java.util.Map.Entry;
 public class EventsHundler {
 
     private Map<Entry<String, String>, List<ApacseventsCha>> faultsPerHolders;
-    private final String resPath = "http://192.168.0.151:9763/registry/resource/";
-    private final String grPhotoPath = "_system/governance/ssoi/cardholders/photo/";
-    private String photoPath = resPath + grPhotoPath;
-    
-
-    public EventsHundler() {
-    }
 
     private List<ApacseventsCha> getAccessFaults() {
         AccessEvents_Service service = new AccessEvents_Service();
@@ -53,12 +46,5 @@ public class EventsHundler {
      */
     public Map<Entry<String, String>, List<ApacseventsCha>> getFaultsPerHolders() {
         return faultsPerHolders;
-    }
-
-    /**
-     * @return the photoPath
-     */
-    public String getPhotoPath() {
-        return photoPath;
     }
 }
