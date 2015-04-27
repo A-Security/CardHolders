@@ -28,8 +28,8 @@
     </target>
     <target name="wsimport-client-AccessEvents" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/AccessEvents"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AccessEvents" destdir="${build.generated.dir}/jax-wsCache/AccessEvents" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/AccessEvents/wsdl/192.168.0.109_9763/esbdb-1.0/AccessEvents.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://192.168.0.109:9763/esbdb-1.0/AccessEvents?wsdl" xnocompile="true" xendorsed="true">
-            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/AccessEvents/wsdl/192.168.0.109_9763/esbdb-1.0/AccessEvents.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AccessEvents" destdir="${build.generated.dir}/jax-wsCache/AccessEvents" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/AccessEvents/wsdl/localhost_9763/esbdb-1.0/AccessEvents.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:9763/esbdb-1.0/AccessEvents?wsdl" xnocompile="true" xendorsed="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/AccessEvents/wsdl/localhost_9763/esbdb-1.0/AccessEvents.wsdl"/>
             <produces dir="${build.generated.dir}/jax-wsCache/AccessEvents"/>
         </wsimport>
         <copy todir="${build.generated.sources.dir}/jax-ws">

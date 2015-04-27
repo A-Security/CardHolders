@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import javax.xml.parsers.*;
 import java.net.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -16,6 +18,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.wso2.carbon.registry.app.RemoteRegistry;
 import org.w3c.dom.*;
 import org.wso2.carbon.governance.api.cache.ArtifactCacheManager;
+import org.wso2.carbon.governance.api.exception.GovernanceException;
+import org.wso2.carbon.governance.api.util.GovernanceUtils;
 import org.wso2.carbon.registry.core.*;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.xml.sax.SAXException;
@@ -27,8 +31,8 @@ public class GRAdapter {
     private static final String VIPS_PATH = "/ssoi/personcontrol";
     private static final String HOLDERS_FULL_PATH = ARTIFACT_PATH + HOLDERS_PATH;
     private static final String VIPS_FULL_PATH = ARTIFACT_PATH + VIPS_PATH;
-    //private static final String GR_HOST = "192.168.0.151"; // TEST SERVER
-    private static final String GR_HOST = "10.28.65.228"; // PROD SERVER
+    private static final String GR_HOST = "192.168.0.151"; // TEST SERVER
+    //private static final String GR_HOST = "10.28.65.228"; // PROD SERVER
     private static final int GR_PORT = 9443;
     private static final String GR_USER = "Apacs";
     private static final String GR_PASS = "Aa1234567";
@@ -38,11 +42,7 @@ public class GRAdapter {
     private List<AdpCardHolder> notVipCHs = new ArrayList<>();
 
     public GRAdapter() {
-        System.setProperty("sun.security.ssl.allowUnsafeRenegotiation", "true");
         System.setProperty("carbon.repo.write.mode", "true");
-        //System.setProperty("javax.net.ssl.trustStore", GREG_HOME + "/repository/resources/security/client-truststore.jks");
-        //System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
-        //System.setProperty("javax.net.ssl.trustStoreType","JKS");
         try {
             this.grUrl = new URL("https", GR_HOST, GR_PORT, "/registry");
             this.registry = new RemoteRegistry(grUrl, GR_USER, GR_PASS);            
@@ -50,9 +50,27 @@ public class GRAdapter {
             out.print(e.toString());
         }
         ArtifactCacheManager.enableClientCache();
+        
     }
-
-    public boolean fillCHLists() {
+    public Entry<String, String> getNamePhotoById(String holderid){
+        
+        Entry<String, String> pair = null;
+        String chPath = HOLDERS_FULL_PATH + "/" + holderid + ".xml";
+        try {
+            Resource res = registry.get(chPath);
+            AdpCardHolder ch = new AdpCardHolder(res.getContentStream());
+            pair = new SimpleEntry(ch.getName(), ch.getPhotoLink());
+        } catch (RegistryException ex) {
+            System.out.println(ex.toString());
+        }
+        finally {
+            if (pair == null){
+                pair = new SimpleEntry("НЕИЗВЕСТНЫЙ", null);
+            }
+        }
+        return pair;
+    }
+    public boolean fillCHLists() throws GovernanceException {
         boolean result;
         vipCHs.clear();
         notVipCHs.clear();

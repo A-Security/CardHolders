@@ -1,9 +1,15 @@
-<%@ page import="cardholders.*"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@page import="java.util.Map.Entry"%>
+<%@page import="com.asecurity.esbdb.ApacseventsCha"%>
+<%@page import="java.util.List"%>
+<%@page import="cardholders.*"%>
 <%
     EventsHundler eh = new EventsHundler();
-    pageContext.setAttribute("accessFaults", eh.getAccessFaults());
+    eh.fillFaultsPerHolders();
+    pageContext.setAttribute("photoRootPath", eh.getPhotoPath());
+    pageContext.setAttribute("faultsPerHolders", eh.getFaultsPerHolders());
 %>
 <!DOCTYPE html>
 <html>
@@ -15,40 +21,43 @@
         <link href="config/css/faults.css" rel="stylesheet">
         <!-- Load JavaScript Libraries -->
         <script src="config/js/jquery/jquery-2.1.1.min.js"></script>
+        <script src="config/js/faults.js"></script>
         <script src="config/js/jquery/jquery.widget.min.js"></script>
         <script src="config/js/jquery/jquery.mousewheel.js"></script>
     </head>
     <body class="skud">
         <div class="topdiv">
             <div class="title">Нарушения объектового режима за сутки</div>
-            <hr id="hrid">
+            <hr id="hrid"/>
             <!-- server generated place --> 
-            <div>
-                <div class="small-photo br-red">
-                    <div>
+            <c:if test="${faultsPerHolders != null}">
+                <c:forEach items="${faultsPerHolders.entrySet()}" var="entrySet">
+                    <c:if test="${entrySet != null}">
+                        <c:set var="holder" value="${entrySet.getKey()}" />
                         <div>
-                            <img src="00003818.jpg">
+                            <div class="small-photo br-red">
+                                <div>
+                                    <div>
+                                        <c:if test='${holder.getKey() != null && !holder.getKey().equals("")}'>
+                                            <c:set var="photoPath" value="${photoRootPath}${holder.getKey()}.jpg" />
+                                            <img src="${photoPath}"/>
+                                        </c:if>
+                                    </div>
+                                </div>	
+                                <div class="content">${holder.getValue()}</div>
+                            </div>	
+                            <select size="10" style="width: 75%">
+                                <c:forEach items="${entrySet.getValue()}" var="event">
+                                    <c:if test="${event != null}">
+                                        <option>${fn:substringAfter(event.getEventtime(), "T")}&nbsp;${event.getEventtypedesc()}&nbsp;[${event.getSourcename()}]</option>
+                                    </c:if>
+                                </c:forEach>
+                            </select>	
                         </div>
-                    </div>	
-                    <div class="content">Евсеев Виктор Иванович</div>
-                </div>	
-                <select size="10">
-                    <c:forEach items="${accessFaults}" var="af">
-                        <c:if test="${af != null}">
-                            <option>${af.getHoldername()}</option>
-                        </c:if>
-                    </c:forEach>
-                    <option>00:15 Сбой по причине местного нарушения</option>
-                    <option>10:15 Сбой2</option>
-                    <option>00:15 Сбой по причине местного нарушения</option>
-                    <option>10:15 Сбой2</option>
-                    <option>00:15 Сбой по причине местного нарушения</option>
-                    <option>10:15 Сбой2</option>
-                    <option>00:15 Сбой по причине местного нарушения</option>
-                    <option>10:15 Сбой2</option>
-                </select>	
-            </div>
-            &nbsp;
+                    </c:if>
+                    &nbsp;
+                </c:forEach>
+            </c:if>
             <!-- end of server gererated place -->
         </div>
     </body>

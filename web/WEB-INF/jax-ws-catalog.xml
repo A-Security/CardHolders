@@ -3,4 +3,6 @@
     <system systemId="http://192.168.0.109:9763/esbdb-1.0/AccessEvents?wsdl" uri="wsdl/192.168.0.109_9763/esbdb-1.0/AccessEvents.wsdl"/>
     <system systemId="http://192.168.0.109:9763/esbdb-1.0/AccessEvents?xsd=1" uri="wsdl/192.168.0.109_9763/esbdb-1.0/AccessEvents.xsd_1.xsd"/>
     <system systemId="http://192.168.0.109:9763/esbdb-1.0/AccessEvents?xsd=2" uri="wsdl/192.168.0.109_9763/esbdb-1.0/AccessEvents.xsd_2.xsd"/>
+    <system systemId="http://localhost:9763/esbdb-1.0/AccessEvents?wsdl" uri="wsdl/localhost_9763/esbdb-1.0/AccessEvents.wsdl"/>
+    <system systemId="http://localhost:9763/esbdb-1.0/AccessEvents?xsd=1" uri="wsdl/localhost_9763/esbdb-1.0/AccessEvents.xsd_1.xsd"/>
 </catalog>
