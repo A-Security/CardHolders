@@ -18,8 +18,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.wso2.carbon.registry.app.RemoteRegistry;
 import org.w3c.dom.*;
 import org.wso2.carbon.governance.api.cache.ArtifactCacheManager;
-import org.wso2.carbon.governance.api.exception.GovernanceException;
-import org.wso2.carbon.governance.api.util.GovernanceUtils;
 import org.wso2.carbon.registry.core.*;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.xml.sax.SAXException;
@@ -70,7 +68,7 @@ public class GRAdapter {
         }
         return pair;
     }
-    public boolean fillCHLists() throws GovernanceException {
+    public boolean fillCHLists() {
         boolean result;
         vipCHs.clear();
         notVipCHs.clear();

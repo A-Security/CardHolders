@@ -1,7 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@page import="java.util.Map.Entry"%>
 <%@page import="com.asecurity.esbdb.ApacseventsCha"%>
 <%@page import="java.util.List"%>
 <%@page import="cardholders.*"%>
@@ -31,23 +30,22 @@
             <hr id="hrid"/>
             <!-- server generated place --> 
             <c:if test="${faultsPerHolders != null}">
-                <c:forEach items="${faultsPerHolders.entrySet()}" var="entrySet">
-                    <c:if test="${entrySet != null}">
-                        <c:set var="holder" value="${entrySet.getKey()}" />
+                <c:forEach items="${faultsPerHolders.keySet()}" var="key">
+                    <c:if test="${key != null}">
                         <div>
                             <div class="small-photo br-red">
                                 <div>
                                     <div>
-                                        <c:if test='${holder.getKey() != null && !holder.getKey().equals("")}'>
-                                            <c:set var="photoPath" value="${photoRootPath}${holder.getKey()}.jpg" />
+                                        <c:if test='${key.getKey() != null && !key.getKey().equals("")}'>
+                                            <c:set var="photoPath" value="${photoRootPath}${key.getKey()}.jpg" />
                                             <img src="${photoPath}"/>
                                         </c:if>
                                     </div>
                                 </div>	
-                                <div class="content">${holder.getValue()}</div>
+                                <div class="content">${key.getValue()}</div>
                             </div>	
                             <select size="10" style="width: 75%">
-                                <c:forEach items="${entrySet.getValue()}" var="event">
+                                <c:forEach items="${faultsPerHolders.get(key)}" var="event">
                                     <c:if test="${event != null}">
                                         <option>${fn:substringAfter(event.getEventtime(), "T")}&nbsp;${event.getEventtypedesc()}&nbsp;[${event.getSourcename()}]</option>
                                     </c:if>
