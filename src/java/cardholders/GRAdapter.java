@@ -50,23 +50,20 @@ public class GRAdapter {
         ArtifactCacheManager.enableClientCache();
         
     }
-    public Entry<String, String> getNamePhotoById(String holderid){
+    public AdpCardHolder getAchById(String holderid){
         
-        Entry<String, String> pair = null;
+        AdpCardHolder ch = null;
         String chPath = HOLDERS_FULL_PATH + "/" + holderid + ".xml";
         try {
             Resource res = registry.get(chPath);
-            AdpCardHolder ch = new AdpCardHolder(res.getContentStream());
-            pair = new SimpleEntry(ch.getName(), ch.getPhotoLink());
+            ch = new AdpCardHolder(res.getContentStream());
         } catch (RegistryException ex) {
             System.out.println(ex.toString());
-        }
-        finally {
-            if (pair == null){
-                pair = new SimpleEntry("НЕИЗВЕСТНЫЙ", null);
+            if (ch == null){
+                ch = new AdpCardHolder();
             }
         }
-        return pair;
+        return ch;
     }
     public boolean fillCHLists() {
         boolean result;
@@ -77,13 +74,15 @@ public class GRAdapter {
             for (String resPath : col.getChildren()) {
                 Resource res = registry.get(resPath);
                 if (res != null && !(res instanceof Collection)) {
-                    
-                    InputStream contentStream = res.getContentStream();
-                    AdpCardHolder ch = new AdpCardHolder(contentStream);
+                    AdpCardHolder ch = new AdpCardHolder(res.getContentStream());
                     String vipPath = VIPS_FULL_PATH + "/" +ch.getId();
                     boolean vipExist = registry.resourceExists(vipPath);
                     if (vipExist ^ ch.isVip()) {
-                        setVipValue(res, vipExist);
+                        byte[] resContent = setVipValue(res, vipExist);
+                        if (resContent != null){
+                            res.setContent(resContent);
+                            registry.put(resPath, res);
+                        }
                     }
                     if (vipExist){
                         vipCHs.add(ch);
@@ -100,15 +99,14 @@ public class GRAdapter {
         }
         return result;
     }
-    private void setVipValue(Resource res, boolean vipVal) {
+    private byte[] setVipValue(Resource res, boolean vipVal) {
+        byte[] result = null;
         try {
-            byte[] resContent = (byte[])res.getContent();
-            ByteArrayInputStream bais = new ByteArrayInputStream(resContent);
             DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
             bf.setNamespaceAware(true);
             bf.setValidating(false);
             DocumentBuilder builder = bf.newDocumentBuilder();
-            Document xdoc = builder.parse(bais);
+            Document xdoc = builder.parse(res.getContentStream());
             Node vip = xdoc.getElementsByTagName("vip").item(0);
             if (vip != null && (vipVal ^ Boolean.valueOf(vip.getTextContent()))) {
                 vip.setTextContent(String.valueOf(vipVal));
@@ -119,13 +117,12 @@ public class GRAdapter {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 StreamResult sr = new StreamResult(baos);
                 transformer.transform(source, sr);
-                resContent = baos.toByteArray();
-                res.setContent(resContent);
-                registry.put(res.getPath(), res);
+                result = baos.toByteArray();
             }
         } catch (RegistryException | TransformerException | ParserConfigurationException | SAXException | IOException | DOMException e) {
             out.print(e.toString());
         }
+        return result;
     }
     public boolean setCHsVipValue(String[] chsList, boolean vipValue) {
         boolean result = false;
@@ -148,7 +145,11 @@ public class GRAdapter {
                 }
                 if (registry.resourceExists(chPath)) {
                     Resource res = registry.get(chPath);
-                    setVipValue(res, vipValue);
+                    byte[] resContent = setVipValue(res, vipValue);
+                    if (resContent != null){
+                        res.setContent(resContent);
+                        registry.put(chPath, res);
+                    }
                 }
             }
             result = true;
