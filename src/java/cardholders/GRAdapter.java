@@ -29,7 +29,7 @@ public class GRAdapter {
     private static final String VIPS_PATH = "/ssoi/personcontrol";
     private static final String HOLDERS_FULL_PATH = ARTIFACT_PATH + HOLDERS_PATH;
     private static final String VIPS_FULL_PATH = ARTIFACT_PATH + VIPS_PATH;
-    private static final String GR_HOST = "192.168.0.151"; // TEST SERVER
+    public static final String GR_HOST = "192.168.0.151"; // TEST SERVER
     //private static final String GR_HOST = "10.28.65.228"; // PROD SERVER
     private static final int GR_PORT = 9443;
     private static final String GR_USER = "Apacs";

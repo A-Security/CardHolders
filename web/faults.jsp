@@ -5,7 +5,7 @@
 <%
     EventsHundler eh = new EventsHundler();
     eh.fillFaultsPerHolders();
-    pageContext.setAttribute("photoRootPath", "http://192.168.0.151:9763/registry/resource/_system/governance/ssoi/cardholders/photo/");
+    pageContext.setAttribute("photoRootPath", "http://" + GRAdapter.GR_HOST + ":9763/registry/resource/_system/governance/ssoi/cardholders/photo/");
     pageContext.setAttribute("faultsPerHolders", eh.getFaultsPerHolders());
 %>
 <!DOCTYPE html>
