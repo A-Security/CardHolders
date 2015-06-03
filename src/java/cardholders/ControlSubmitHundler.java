@@ -14,10 +14,11 @@ public class ControlSubmitHundler extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if (request.getParameter("ok") != null) {
-            GRAdapter adp = new GRAdapter();
-            String vipch[] = request.getParameterValues("vipch");
+            ChsCfg cfg = (ChsCfg)request.getSession().getAttribute("cfg");
+            GRAdapter adp = new GRAdapter(cfg);
+            String[] vipch = request.getParameterValues("vipch");
             adp.setCHsVipValue(vipch, true);
-            String notvipch[] = request.getParameterValues("remvipch");
+            String[] notvipch = request.getParameterValues("remvipch");
             adp.setCHsVipValue(notvipch, false);
         }
     }

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -21,8 +19,8 @@ public class AdpCardHolder implements Comparable<AdpCardHolder>{
     public AdpCardHolder(){
     }
     
-    public AdpCardHolder(InputStream is) {
-        deserializeGRContent(is);
+    public AdpCardHolder(InputStream is, DocumentBuilder builder) {
+        deserializeGRContent(is, builder);
     }
 
     public AdpCardHolder(String ID, String Name, String ShortName, String CardNo, String PhotoLink, boolean VIP) {
@@ -82,18 +80,15 @@ public class AdpCardHolder implements Comparable<AdpCardHolder>{
         this.vip = Boolean.valueOf(VIP);
     }
     
-    private void deserializeGRContent(InputStream is){
+    private void deserializeGRContent(InputStream is, DocumentBuilder builder){
         try {
-            DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
-            bf.setValidating(false);
-            DocumentBuilder builder = bf.newDocumentBuilder();
             Document xdoc = builder.parse(is);
             for(Field f : this.getClass().getDeclaredFields()){
                 f.setAccessible(true);
                 String val = xdoc.getElementsByTagName(f.getName()).item(0).getTextContent();
                 f.set(this, (f.getType() != Boolean.class) ? val : Boolean.valueOf(val) );
             }
-        } catch (ParserConfigurationException | SAXException | IOException | SecurityException | DOMException | IllegalArgumentException | IllegalAccessException ex) {
+        } catch (SAXException | IOException | SecurityException | DOMException | IllegalArgumentException | IllegalAccessException ex) {
             System.out.println(ex.toString());
         }
     }

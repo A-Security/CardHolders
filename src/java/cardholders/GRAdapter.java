@@ -7,8 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import javax.xml.parsers.*;
 import java.net.*;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -23,14 +23,13 @@ import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.xml.sax.SAXException;
 
 public class GRAdapter {
-    private static final String GREG_HOME = "/opt/wso2/gr";
+    //private static final String GREG_HOME = "/opt/wso2/gr";
     private static final String ARTIFACT_PATH = "/_system/governance";
     private static final String HOLDERS_PATH = "/ssoi/cardholders";
     private static final String VIPS_PATH = "/ssoi/personcontrol";
     private static final String HOLDERS_FULL_PATH = ARTIFACT_PATH + HOLDERS_PATH;
     private static final String VIPS_FULL_PATH = ARTIFACT_PATH + VIPS_PATH;
-    public static final String GR_HOST = "192.168.0.151"; // TEST SERVER
-    //private static final String GR_HOST = "10.28.65.228"; // PROD SERVER
+    private final String GR_HOST;
     private static final int GR_PORT = 9443;
     private static final String GR_USER = "Apacs";
     private static final String GR_PASS = "Aa1234567";
@@ -38,15 +37,23 @@ public class GRAdapter {
     private Registry registry;
     private List<AdpCardHolder> vipCHs = new ArrayList<>();
     private List<AdpCardHolder> notVipCHs = new ArrayList<>();
-
-    public GRAdapter() {
+    private DocumentBuilderFactory xDocBuilder = DocumentBuilderFactory.newInstance();
+    private DocumentBuilder builder;
+    private final ChsCfg cfg;
+    
+    public GRAdapter(ChsCfg cfg) {
+        this.cfg = cfg;
+        this.GR_HOST = cfg.getGRhost();
         System.setProperty("carbon.repo.write.mode", "true");
         try {
+            this.xDocBuilder.setNamespaceAware(true);
+            this.xDocBuilder.setValidating(false);
+            this.builder = this.xDocBuilder.newDocumentBuilder();
             this.grUrl = new URL("https", GR_HOST, GR_PORT, "/registry");
             this.registry = new RemoteRegistry(grUrl, GR_USER, GR_PASS);            
-        } catch (MalformedURLException | RegistryException e) {
+        } catch (MalformedURLException | RegistryException | ParserConfigurationException e) {
             out.print(e.toString());
-        }
+        } 
         ArtifactCacheManager.enableClientCache();
         
     }
@@ -56,7 +63,7 @@ public class GRAdapter {
         String chPath = HOLDERS_FULL_PATH + "/" + holderid + ".xml";
         try {
             Resource res = registry.get(chPath);
-            ch = new AdpCardHolder(res.getContentStream());
+            ch = new AdpCardHolder(res.getContentStream(), builder);
         } catch (RegistryException ex) {
             System.out.println(ex.toString());
             if (ch == null){
@@ -74,15 +81,12 @@ public class GRAdapter {
             for (String resPath : col.getChildren()) {
                 Resource res = registry.get(resPath);
                 if (res != null && !(res instanceof Collection)) {
-                    AdpCardHolder ch = new AdpCardHolder(res.getContentStream());
+                    AdpCardHolder ch = new AdpCardHolder(res.getContentStream(), builder);
                     String vipPath = VIPS_FULL_PATH + "/" +ch.getId();
                     boolean vipExist = registry.resourceExists(vipPath);
                     if (vipExist ^ ch.isVip()) {
-                        byte[] resContent = setVipValue(res, vipExist);
-                        if (resContent != null){
-                            res.setContent(resContent);
-                            registry.put(resPath, res);
-                        }
+                        res = setVipValue(res, vipExist);
+                        registry.put(resPath, res);
                     }
                     if (vipExist){
                         vipCHs.add(ch);
@@ -99,13 +103,9 @@ public class GRAdapter {
         }
         return result;
     }
-    private byte[] setVipValue(Resource res, boolean vipVal) {
-        byte[] result = null;
+    private Resource setVipValue(Resource res, boolean vipVal) {
+        byte[] content;
         try {
-            DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
-            bf.setNamespaceAware(true);
-            bf.setValidating(false);
-            DocumentBuilder builder = bf.newDocumentBuilder();
             Document xdoc = builder.parse(res.getContentStream());
             Node vip = xdoc.getElementsByTagName("vip").item(0);
             if (vip != null && (vipVal ^ Boolean.valueOf(vip.getTextContent()))) {
@@ -117,12 +117,16 @@ public class GRAdapter {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 StreamResult sr = new StreamResult(baos);
                 transformer.transform(source, sr);
-                result = baos.toByteArray();
+                content = baos.toByteArray();
+                if (content != null){
+                    res.setContent(content);
+                    res.setProperty("holder_vip", String.valueOf(vipVal));
+                }
             }
-        } catch (RegistryException | TransformerException | ParserConfigurationException | SAXException | IOException | DOMException e) {
+        } catch (RegistryException | TransformerException | SAXException | IOException | DOMException e) {
             out.print(e.toString());
         }
-        return result;
+        return res;
     }
     public boolean setCHsVipValue(String[] chsList, boolean vipValue) {
         boolean result = false;
@@ -145,11 +149,8 @@ public class GRAdapter {
                 }
                 if (registry.resourceExists(chPath)) {
                     Resource res = registry.get(chPath);
-                    byte[] resContent = setVipValue(res, vipValue);
-                    if (resContent != null){
-                        res.setContent(resContent);
-                        registry.put(chPath, res);
-                    }
+                    res = setVipValue(res, vipValue);
+                    registry.put(chPath, res);
                 }
             }
             result = true;

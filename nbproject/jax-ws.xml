@@ -4,9 +4,9 @@
   </services>
   <clients>
     <client name="AccessEvents">
-      <wsdl-url>http://localhost:9763/esbdb-1.0/AccessEvents?wsdl</wsdl-url>
-      <local-wsdl-file>localhost_9763/esbdb-1.0/AccessEvents.wsdl</local-wsdl-file>
-      <package-name>com.asecurity.esbdb</package-name>
+      <wsdl-url>http://192.168.0.109:9763/eventslogdb/AccessEvents?wsdl</wsdl-url>
+      <local-wsdl-file>192.168.0.109_9763/eventslogdb/AccessEvents.wsdl</local-wsdl-file>
+      <package-name>com.asecurity.eventslogdb</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
         <wsimport-option>
@@ -23,7 +23,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>wsdlLocation</wsimport-option-name>
-          <wsimport-option-value>http://localhost:9763/esbdb-1.0/AccessEvents?wsdl</wsimport-option-value>
+          <wsimport-option-value>http://192.168.0.109:9763/eventslogdb/AccessEvents?wsdl</wsimport-option-value>
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>xnocompile</wsimport-option-name>

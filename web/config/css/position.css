@@ -1,0 +1,153 @@
+.skud {
+  padding:5px;
+  background-color: #1e1e1e;
+  font-family: 'Segoe UI Light_', 'Open Sans Light', Verdana, Arial, Helvetica, sans-serif;
+}
+.top {
+  font-family:sans-serif;
+  font-size:10pt;
+  margin:auto;
+	margin-top: 5px;
+	margin-left: 10px;
+}		
+.topb div {
+  margin:9px;			
+  float:left;
+  background-color: #94D1FF; 
+  /* border */
+  border-radius:6px; 
+  -webkit-border-radius:6px; 
+  -moz-border-radius:5px;
+  /* transition */
+  transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+}
+.topb a {
+  text-decoration:none; 
+  color: black;
+}	
+.topb div:hover {
+  background-color: #FFFFFF;
+  box-shadow: 0px 0px 7px rgba(255,255,255,0.8);
+  -webkit-box-shadow: 0px 0px 7px rgba(255,255,255,0.8);
+  -moz-box-shadow: 0px 0px 7px rgba(255,255,255,0.8);
+}
+.topb a:hover {
+  color: red;
+}			
+.topb a div {
+  padding: 3px; 
+  padding-left:10px;
+  padding-right:10px;
+}
+
+.datagrid {
+  margin-top: 0px;
+  margin-left: 10px;
+  margin-right: 0px;
+  position: absolute;
+  width: 1400px;
+}
+.datagrid table { 
+  border-collapse: collapse; 
+  text-align: left; 
+  width: 100%;
+  overflow-y: scroll;
+
+} 
+.datagrid {
+  font: normal 12px/100% Arial, Helvetica, sans-serif; 
+  background: #fff; 
+  overflow: hidden; 
+  border: 1px solid #8C8C8C; 
+  -webkit-border-radius: 5px; 
+  -moz-border-radius: 5px; 
+  border-radius: 5px; 
+}
+.datagrid table td, .datagrid table th { 
+  padding: 3px 10px; 
+}
+.datagrid table thead th {
+  background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #8C8C8C), color-stop(1, #7D7D7D) );
+  background:-moz-linear-gradient( center top, #8C8C8C 5%, #7D7D7D 100% );
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#8C8C8C', endColorstr='#7D7D7D');
+  background-color:#8C8C8C; 
+  color:#FFFFFF; 
+  font-size: 15px; 
+  font-weight: bold; 
+  border-left: 1px solid #A3A3A3; 
+} 
+.datagrid table thead th:first-child { 
+  border: none; 
+}
+
+.datagrid table tbody td { 
+  border-left: 1px solid #DBDBDB;
+  font-size: 12px;
+  font-weight: normal; 
+}
+.datagrid table tbody .alt td { 
+  background: #EBEBEB; 
+}
+.datagrid table tbody td:first-child { 
+  border-left: none; 
+  font-size: 12pt;
+}
+.datagrid table tbody tr:last-child td {
+  border-bottom: none; 
+}
+.datagrid table tbody tr td:nth-child(2) { 
+  padding-left:44px;
+}
+.datagrid table tbody tr td:nth-child(3) { 
+  padding-left:18px;
+}
+.datagrid table tbody tr td:nth-child(4) { 
+  padding-left:18px;
+}
+.datagrid table tbody tr td:nth-child(5) { 
+  padding-left:18px;
+}			
+.datagrid table tbody tr td:nth-child(6) { 
+  padding-left:18px;
+}
+.datagrid table tbody tr td:nth-child(7) { 
+  padding-left:18px;
+}
+.datagrid table tbody tr td:nth-child(8) { 
+  padding-left:18px;
+  font-size: 12pt;
+}
+
+.datagrid table tbody tr td:nth-child(9) { 
+  padding-left:18px;
+  font-size: 12pt;
+}			
+.datagrid table tfoot td div { 
+  border-top: 1px solid #8C8C8C;
+  background: #EBEBEB;
+} 
+.datagrid table tfoot td { 
+  padding: 0; 
+  font-size: 12px 
+} 
+.datagrid table tfoot td div { 
+  padding: 2px; 
+}
+.imgdiv { 
+  background-repeat: no-repeat;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  width: 25px;
+  height: 23px;
+}
+
+.green{ 
+  background-image: url('../image/green-man-small2.png');
+}
+
+.grey{ 
+  background-image: url('../image/yellow-man-small2.png');
+}

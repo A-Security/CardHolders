@@ -1,0 +1,114 @@
+.skud {
+    padding:5px;
+    background-color: #1e1e1e;
+    font-family: 'Segoe UI Light_', 'Open Sans Light', Verdana, Arial, Helvetica, sans-serif;
+}
+.skud .bg-black  {
+    background-color: #000000 !important;
+}
+.skud .bg-darkRed  {
+    background-color: #9a1616 !important;
+}
+.skud .bg-orange  {
+    background-color: #fa6800 !important;
+}
+.skud .bg-green  {
+    background-color: #60a917 !important;
+}
+.skud .bg-dark  {
+    background-color: #333333 !important;
+}
+
+.skud .bg-white  {
+    background-color: #ffffff !important;
+}	
+.skud .opacity {
+    opacity: .8;
+}
+.skud .br-white{
+    border: 1px #ffffff solid ;
+}
+.skud .br-darkRed{
+    border: 2px #9a1616 solid ;
+}	
+.skud .br-red{
+    border: 1px #e51400 solid ;
+}		
+.skud .br-orange  {
+    border: 1px #fa6800 solid ; 
+}
+.skud .fg-white {
+    color: #eeeeee;
+}
+.skud .fg-black {
+    color: #000000;
+}		
+.skud .padding-big {
+    padding: 8px;
+}	
+.skud .padding-none {
+    padding: 0px;
+}	
+
+
+.skud .title {
+    position:absolute;
+    font-size: 22px;
+    line-height: 26px;
+    font-weight: bold;
+    top: 2px;
+    left: 0px;
+    width: 100%;
+    color:#00FF00;
+}
+
+.skud .inner {
+    position:relative;
+    text-align:center;
+    width: auto;
+}
+
+.skud .first-photo {
+    width: 100%;
+    height: 100%;
+    padding: 5;
+    margin: 0;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+.skud .first-photo .container{
+    width: 100%;
+    height: 100%;
+}
+.skud .image {
+    background: url(../image/empty.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height:100%;
+    width: 100%;
+    transition: background-image 1s ease-in-out;
+    -webkit-transition: background-image 1s ease-in-out;
+}
+.skud .first-photo .content {
+    font-size: 62px;
+    font-weight: bold;
+    line-height: 68px;
+    text-align:left;
+    width: inherit;
+    bottom: 0;
+    position: absolute;
+}
+
+.skud .first-photo .brand {
+    padding: 2px;
+    font-size: 64px;
+    text-align:center;
+    font-weight: bold;
+    width: 200px;
+    height: 90px;
+    margin-left: 2%;
+    top: 0px;
+    position: absolute;
+    display: block;
+}		
